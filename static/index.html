@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b16">
+
+    <title>ROADVISION AI | Intelligent Road Analysis</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #080b16;
+            --surface: #101526;
+            --surface-light: #151c30;
+            --border: rgba(161, 177, 220, 0.12);
+            --text: #f2f5ff;
+            --muted: #8c97b5;
+            --cyan: #65f5e2;
+            --blue: #6c83ff;
+            --violet: #b58aff;
+            --orange: #ffad72;
+            --green: #75f0ac;
+            --red: #ff778b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 75% 0%, rgba(86, 102, 255, 0.13), transparent 38%),
+                radial-gradient(ellipse at 0% 45%, rgba(64, 232, 209, 0.055), transparent 35%),
+                var(--bg);
+            font-family: "DM Sans", sans-serif;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        .upload-zone:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 4px;
+        }
+
+        .app {
+            max-width: 1600px;
+            margin: auto;
+            padding: 0 44px 40px;
+        }
+
+        /* Header */
+
+        .topbar {
+            min-height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: #071414;
+            font-size: 23px;
+            background: linear-gradient(135deg, var(--cyan), #80bfff);
+            box-shadow: 0 0 30px rgba(101, 245, 226, 0.15);
+        }
+
+        .brand-name {
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            font-size: 19px;
+        }
+
+        .brand-name span {
+            color: var(--cyan);
+        }
+
+        .brand-subtitle {
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 17px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 14px;
+            background: rgba(117, 240, 172, 0.055);
+            border: 1px solid rgba(117, 240, 172, 0.16);
+            border-radius: 30px;
+            font-size: 12px;
+            color: #b7f9d0;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(117, 240, 172, 0.8);
+        }
+
+        .version {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Hero */
+
+        .hero {
+            padding: 48px 0 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 35px;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 2.4px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 23px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(35px, 4.5vw, 58px);
+            line-height: 1.08;
+            letter-spacing: -2.3px;
+            max-width: 700px;
+        }
+
+        h1 .gradient {
+            background: linear-gradient(100deg, var(--cyan), #8ba5ff 55%, var(--violet));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            max-width: 590px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.9;
+            margin-top: 18px;
+        }
+
+        .hero-tag {
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.025);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 4px;
+        }
+
+        .hero-tag-label {
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .hero-tag-value {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .hero-tag-value span {
+            color: var(--cyan);
+        }
+
+        /* Layout */
+
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.85fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            background: linear-gradient(
+                145deg,
+                rgba(21, 28, 48, 0.91),
+                rgba(13, 18, 33, 0.96)
+            );
+            border: 1px solid var(--border);
+            border-radius: 19px;
+            overflow: hidden;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.13);
+        }
+
+        .panel-header {
+            padding: 20px 23px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .panel-heading {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .panel-subheading {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .mini-badge {
+            border-radius: 6px;
+            padding: 7px 9px;
+            color: var(--cyan);
+            background: rgba(101, 245, 226, 0.07);
+            border: 1px solid rgba(101, 245, 226, 0.12);
+            font-size: 9px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* Image workspace */
+
+        .image-workspace {
+            padding: 21px;
+        }
+
+        .upload-zone {
+            min-height: 390px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px dashed rgba(132, 155, 209, 0.28);
+            border-radius: 14px;
+            background:
+                linear-gradient(rgba(11, 16, 31, 0.89), rgba(11, 16, 31, 0.93)),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 39px,
+                    rgba(124, 153, 209, 0.07) 40px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 39px,
+                    rgba(124, 153, 209, 0.07) 40px
+                );
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--cyan);
+            background-color: rgba(101, 245, 226, 0.04);
+        }
+
+        .upload-placeholder {
+            max-width: 360px;
+            padding: 30px 22px;
+            text-align: center;
+        }
+
+        .upload-symbol {
+            width: 74px;
+            height: 74px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 23px;
+            border-radius: 22px;
+            font-size: 29px;
+            color: var(--cyan);
+            background: linear-gradient(
+                145deg,
+                rgba(101, 245, 226, 0.13),
+                rgba(108, 131, 255, 0.12)
+            );
+            border: 1px solid rgba(101, 245, 226, 0.17);
+            box-shadow: 0 0 40px rgba(101, 245, 226, 0.06);
+        }
+
+        .upload-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .upload-description {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+            margin-top: 11px;
+        }
+
+        .browse-button {
+            margin-top: 23px;
+            border: 1px solid rgba(101, 245, 226, 0.33);
+            border-radius: 9px;
+            padding: 12px 21px;
+            color: var(--cyan);
+            background: rgba(101, 245, 226, 0.07);
+            transition: 0.2s;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .browse-button:hover {
+            background: rgba(101, 245, 226, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .upload-formats {
+            margin-top: 17px;
+            color: #66728e;
+            font-size: 10px;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            min-height: 390px;
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: #090d19;
+        }
+
+        .image-preview img {
+            display: block;
+            max-width: 100%;
+            max-height: 470px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .image-label {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            background: rgba(8, 11, 22, 0.88);
+            color: var(--cyan);
+            border-radius: 6px;
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+        .file-info {
+            display: none;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-top: 14px;
+            padding: 13px 15px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .file-name {
+            font-size: 12px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .file-size {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .remove-button {
+            color: var(--red);
+            background: transparent;
+            border: none;
+            font-size: 11px;
+            padding: 8px;
+            flex-shrink: 0;
+        }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .analyze-button {
+            flex: 1;
+            min-height: 49px;
+            border: none;
+            border-radius: 10px;
+            color: #071513;
+            background: linear-gradient(100deg, var(--cyan), #9bf4da);
+            box-shadow: 0 6px 25px rgba(101, 245, 226, 0.12);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .analyze-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(101, 245, 226, 0.2);
+        }
+
+        .analyze-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .reset-button {
+            min-height: 49px;
+            padding: 0 18px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .reset-button:hover {
+            color: var(--text);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .helper-text {
+            color: #6e7997;
+            font-size: 10px;
+            text-align: center;
+            line-height: 1.8;
+            margin-top: 15px;
+        }
+
+        /* Right sidebar */
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 17px;
+        }
+
+        .metric-card {
+            min-height: 111px;
+            padding: 16px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.018);
+        }
+
+        .metric-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .metric-icon {
+            font-size: 16px;
+            color: var(--cyan);
+        }
+
+        .metric-value {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 29px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            margin-top: 12px;
+        }
+
+        .metric-note {
+            font-size: 9px;
+            color: #697693;
+            margin-top: 5px;
+        }
+
+        .metric-card:nth-child(2) .metric-icon {
+            color: var(--violet);
+        }
+
+        .metric-card:nth-child(3) .metric-icon {
+            color: var(--orange);
+        }
+
+        .metric-card:nth-child(4) .metric-icon {
+            color: var(--green);
+        }
+
+        /* Results */
+
+        .results-content {
+            padding: 18px;
+        }
+
+        .results-empty {
+            text-align: center;
+            padding: 18px 12px 21px;
+        }
+
+        .results-empty-icon {
+            font-size: 25px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+
+        .results-empty-title {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .results-empty-text {
+            font-size: 11px;
+            line-height: 1.8;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .result-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .result-item {
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.025);
+            border-radius: 10px;
+            padding: 13px;
+        }
+
+        .result-item-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .class-name {
+            font-size: 11px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .confidence {
+            color: var(--cyan);
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .confidence-track {
+            height: 4px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--blue), var(--cyan));
+            transition: width 0.4s;
+        }
+
+        .result-coordinates {
+            font-size: 9px;
+            color: var(--muted);
+            margin-top: 9px;
+        }
+
+        .result-image-button {
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px;
+            color: var(--cyan);
+            background: rgba(101, 245, 226, 0.05);
+            border: 1px solid rgba(101, 245, 226, 0.16);
+            border-radius: 9px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .result-image-button:hover {
+            background: rgba(101, 245, 226, 0.1);
+        }
+
+        .error-box {
+            display: none;
+            margin-top: 14px;
+            border: 1px solid rgba(255, 119, 139, 0.2);
+            background: rgba(255, 119, 139, 0.06);
+            border-radius: 9px;
+            padding: 13px;
+            color: #ff9aa9;
+            font-size: 11px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .loading-box {
+            display: none;
+            padding: 24px 10px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .spinner {
+            width: 27px;
+            height: 27px;
+            margin: 0 auto 13px;
+            border: 2px solid rgba(101, 245, 226, 0.14);
+            border-top-color: var(--cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Model information */
+
+        .model-info {
+            padding: 19px;
+        }
+
+        .model-status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 17px;
+        }
+
+        .model-status-label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .ready-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--green);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .model-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 14px 0;
+        }
+
+        .model-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 13px;
+        }
+
+        .model-row-label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .model-row-value {
+            font-size: 11px;
+            font-weight: 600;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .class-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 16px;
+        }
+
+        .class-tag {
+            color: #b8c6e9;
+            background: rgba(108, 131, 255, 0.08);
+            border: 1px solid rgba(108, 131, 255, 0.14);
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 9px;
+        }
+
+        /* Footer */
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-top: 29px;
+            margin-top: 27px;
+            border-top: 1px solid var(--border);
+            color: #66718d;
+            font-size: 10px;
+        }
+
+        .footer-brand {
+            color: #a7b2ce;
+            font-family: "Space Grotesk", sans-serif;
+            letter-spacing: 1.2px;
+            font-weight: 700;
+        }
+
+        .footer-brand span {
+            color: var(--cyan);
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            z-index: 100;
+            max-width: calc(100% - 30px);
+            transform: translate(-50%, 20px);
+            opacity: 0;
+            pointer-events: none;
+            padding: 13px 20px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #171e31;
+            color: var(--text);
+            font-size: 12px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+            transition: 0.25s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        @media (max-width: 1050px) {
+            .app {
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+
+            .workspace {
+                grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.9fr);
+            }
+
+            .hero {
+                align-items: flex-start;
+            }
+
+            .hero-tag {
+                display: none;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .app {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .topbar {
+                min-height: 75px;
+            }
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .brand-subtitle {
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+
+            .brand-icon {
+                width: 38px;
+                height: 38px;
+            }
+
+            .version {
+                display: none;
+            }
+
+            .system-status {
+                padding: 9px 11px;
+                font-size: 10px;
+            }
+
+            .hero {
+                padding-top: 36px;
+                padding-bottom: 25px;
+            }
+
+            h1 {
+                font-size: 39px;
+                letter-spacing: -1.5px;
+            }
+
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-zone,
+            .image-preview {
+                min-height: 320px;
+            }
+
+            .image-preview img {
+                max-height: 390px;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- HEADER -->
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-icon">⌁</div>
+
+                <div>
+                    <div class="brand-name">ROAD<span>VISION</span> AI</div>
+                    <div class="brand-subtitle">INTELLIGENT ROAD ANALYSIS</div>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    <span id="connectionStatus">CONNECTING...</span>
+                </div>
+
+                <div class="version">LOCAL SYSTEM · V1.0</div>
+            </div>
+        </header>
+
+
+        <!-- HERO -->
+        <section class="hero">
+            <div>
+                <div class="eyebrow">AI-POWERED INFRASTRUCTURE</div>
+
+                <h1>
+                    See the road.<br>
+                    <span class="gradient">Detect the unseen.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Analyze road surfaces with intelligent computer vision.
+                    Identify cracks, potholes, and other road damage using
+                    a trained YOLO detection model.
+                </p>
+            </div>
+
+            <div class="hero-tag">
+                <div class="hero-tag-label">DETECTION ENGINE</div>
+                <div class="hero-tag-value">YOLO <span>11n</span></div>
+            </div>
+        </section>
+
+
+        <!-- MAIN WORKSPACE -->
+        <main class="workspace">
+
+            <!-- LEFT PANEL -->
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-heading">Image Analysis Workspace</div>
+                        <div class="panel-subheading">
+                            Upload a road image to begin detection
+                        </div>
+                    </div>
+
+                    <div class="mini-badge">VISION ENGINE</div>
+                </div>
+
+                <div class="image-workspace">
+
+                    <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/jpeg,image/png,image/webp,image/bmp"
+                        hidden
+                    >
+
+                    <div class="upload-zone" id="uploadZone" tabindex="0">
+
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <div class="upload-symbol">↥</div>
+
+                            <div class="upload-title">Drop your image here</div>
+
+                            <p class="upload-description">
+                                Upload a road image and let the AI engine
+                                identify potential surface damage.
+                            </p>
+
+                            <button
+                                type="button"
+                                class="browse-button"
+                                id="browseButton"
+                            >
+                                ↑ &nbsp; Browse image
+                            </button>
+
+                            <div class="upload-formats">
+                                JPG · PNG · WEBP · BMP
+                            </div>
+                        </div>
+
+                        <div class="image-preview" id="imagePreview">
+                            <span class="image-label" id="imageLabel">
+                                SOURCE IMAGE
+                            </span>
+                            <img id="previewImage" alt="Selected road image">
+                        </div>
+                    </div>
+
+
+                    <div class="file-info" id="fileInfo">
+                        <div>
+                            <div class="file-name" id="fileName"></div>
+                            <div class="file-size" id="fileSize"></div>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="remove-button"
+                            id="removeButton"
+                        >
+                            Remove ×
+                        </button>
+                    </div>
+
+
+                    <div class="action-row">
+                        <button
+                            type="button"
+                            class="analyze-button"
+                            id="analyzeButton"
+                            disabled
+                        >
+                            <span id="analyzeButtonText">
+                                ✦ &nbsp; Analyze Image
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="reset-button"
+                            id="resetButton"
+                        >
+                            Reset
+                        </button>
+                    </div>
+
+                    <p class="helper-text">
+                        The model processes your image locally through the
+                        configured API.<br>
+                        Results depend on image quality and model confidence.
+                    </p>
+
+                    <div class="error-box" id="errorBox"></div>
+                </div>
+            </section>
+
+
+            <!-- RIGHT SIDEBAR -->
+            <aside class="sidebar">
+
+                <!-- METRICS -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-heading">Detection Overview</div>
+                            <div class="panel-subheading">
+                                Latest analysis metrics
+                            </div>
+                        </div>
+
+                        <div class="mini-badge">LIVE DATA</div>
+                    </div>
+
+                    <div class="metrics-grid">
+
+                        <div class="metric-card">
+                            <div class="metric-top">
+                                <span class="metric-label">Detected<br>Objects</span>
+                                <span class="metric-icon">⌗</span>
+                            </div>
+
+                            <div class="metric-value" id="totalDetections">—</div>
+                            <div class="metric-note">Current image</div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-top">
+                                <span class="metric-label">Avg.<br>Confidence</span>
+                                <span class="metric-icon">◈</span>
+                            </div>
+
+                            <div class="metric-value" id="avgConfidence">—</div>
+                            <div class="metric-note">Across detections</div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-top">
+                                <span class="metric-label">Damage<br>Types</span>
+                                <span class="metric-icon">⌘</span>
+                            </div>
+
+                            <div class="metric-value" id="damageTypes">—</div>
+                            <div class="metric-note">Unique classes found</div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-top">
+                                <span class="metric-label">Image<br>Resolution</span>
+                                <span class="metric-icon">▧</span>
+                            </div>
+
+                            <div
+                                class="metric-value"
+                                id="imageResolution"
+                                style="font-size: 17px; letter-spacing: -0.5px;"
+                            >
+                                —
+                            </div>
+
+                            <div class="metric-note">Width × height</div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- DETECTION RESULTS -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-heading">Detection Results</div>
+                            <div class="panel-subheading">
+                                Classes and confidence scores
+                            </div>
+                        </div>
+
+                        <div class="mini-badge" id="resultsBadge">WAITING</div>
+                    </div>
+
+                    <div class="results-content">
+
+                        <div class="results-empty" id="resultsEmpty">
+                            <div class="results-empty-icon">◎</div>
+
+                            <div class="results-empty-title">
+                                No analysis yet
+                            </div>
+
+                            <p class="results-empty-text">
+                                Upload an image and run the AI analysis
+                                to see the detected road damage here.
+                            </p>
+                        </div>
+
+                        <div class="loading-box" id="loadingBox">
+                            <div class="spinner"></div>
+                            <div>Analyzing road surface...</div>
+                        </div>
+
+                        <div
+                            class="result-list"
+                            id="resultList"
+                            style="display: none;"
+                        ></div>
+
+                        <button
+                            type="button"
+                            class="result-image-button"
+                            id="viewResultButton"
+                            style="display: none;"
+                        >
+                            View Annotated Image ↗
+                        </button>
+                    </div>
+                </section>
+
+
+                <!-- MODEL INFORMATION -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-heading">Model Information</div>
+                            <div class="panel-subheading">
+                                Active inference configuration
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="model-info">
+
+                        <div class="model-status-row">
+                            <span class="model-status-label">
+                                Model status
+                            </span>
+
+                            <span class="ready-badge">
+                                <span class="status-dot"></span>
+                                <span id="modelStatus">CHECKING</span>
+                            </span>
+                        </div>
+
+                        <div class="model-divider"></div>
+
+                        <div class="model-row">
+                            <span class="model-row-label">Architecture</span>
+                            <span class="model-row-value">YOLO11n</span>
+                        </div>
+
+                        <div class="model-row">
+                            <span class="model-row-label">Input size</span>
+                            <span class="model-row-value">640 × 640</span>
+                        </div>
+
+                        <div class="model-row">
+                            <span class="model-row-label">Confidence threshold</span>
+                            <span class="model-row-value">25%</span>
+                        </div>
+
+                        <div class="model-row">
+                            <span class="model-row-label">Inference mode</span>
+                            <span class="model-row-value">Image Detection</span>
+                        </div>
+
+                        <div class="model-divider"></div>
+
+                        <div class="model-row">
+                            <span class="model-row-label">Supported classes</span>
+                            <span class="model-row-value" id="classCount">—</span>
+                        </div>
+
+                        <div class="class-tags" id="classTags">
+                            <span class="class-tag">Loading classes...</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-brand">ROAD<span>VISION</span> AI</div>
+
+            <div>
+                Computer Vision · Road Infrastructure Analysis
+            </div>
+
+            <div>LOCAL DEPLOYMENT · 2026</div>
+        </footer>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        const imageInput = document.getElementById("imageInput");
+        const uploadZone = document.getElementById("uploadZone");
+        const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+        const imagePreview = document.getElementById("imagePreview");
+        const previewImage = document.getElementById("previewImage");
+        const imageLabel = document.getElementById("imageLabel");
+
+        const browseButton = document.getElementById("browseButton");
+        const removeButton = document.getElementById("removeButton");
+        const resetButton = document.getElementById("resetButton");
+        const analyzeButton = document.getElementById("analyzeButton");
+        const analyzeButtonText = document.getElementById("analyzeButtonText");
+
+        const fileInfo = document.getElementById("fileInfo");
+        const fileName = document.getElementById("fileName");
+        const fileSize = document.getElementById("fileSize");
+
+        const errorBox = document.getElementById("errorBox");
+        const loadingBox = document.getElementById("loadingBox");
+        const resultsEmpty = document.getElementById("resultsEmpty");
+        const resultList = document.getElementById("resultList");
+        const resultsBadge = document.getElementById("resultsBadge");
+        const viewResultButton = document.getElementById("viewResultButton");
+
+        let selectedFile = null;
+        let sourceImageUrl = null;
+        let annotatedImageUrl = null;
+        let toastTimer = null;
+
+
+        // ----------------------------------
+        // Utility functions
+        // ----------------------------------
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2800);
+        }
+
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) {
+                return `${bytes} B`;
+            }
+
+            if (bytes < 1024 * 1024) {
+                return `${(bytes / 1024).toFixed(1)} KB`;
+            }
+
+            return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+        }
+
+
+        function clearResults() {
+            document.getElementById("totalDetections").textContent = "—";
+            document.getElementById("avgConfidence").textContent = "—";
+            document.getElementById("damageTypes").textContent = "—";
+            document.getElementById("imageResolution").textContent = "—";
+
+            resultList.innerHTML = "";
+            resultList.style.display = "none";
+
+            resultsEmpty.style.display = "block";
+            loadingBox.style.display = "none";
+
+            resultsBadge.textContent = "WAITING";
+            viewResultButton.style.display = "none";
+
+            if (annotatedImageUrl) {
+                URL.revokeObjectURL(annotatedImageUrl);
+                annotatedImageUrl = null;
+            }
+        }
+
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = "block";
+        }
+
+
+        function hideError() {
+            errorBox.textContent = "";
+            errorBox.style.display = "none";
+        }
+
+
+        // ----------------------------------
+        // File selection and preview
+        // ----------------------------------
+
+        function selectFile(file) {
+            if (!file) return;
+
+            const supportedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "image/bmp"
+            ];
+
+            if (!supportedTypes.includes(file.type)) {
+                showError("Unsupported file type. Please choose a JPG, PNG, WEBP, or BMP image.");
+                return;
+            }
+
+            if (file.size === 0) {
+                showError("The selected file is empty.");
+                return;
+            }
+
+            if (file.size > 15 * 1024 * 1024) {
+                showError("The image is too large. Please choose an image smaller than 15 MB.");
+                return;
+            }
+
+            hideError();
+
+            if (sourceImageUrl) {
+                URL.revokeObjectURL(sourceImageUrl);
+            }
+
+            sourceImageUrl = URL.createObjectURL(file);
+            selectedFile = file;
+
+            previewImage.src = sourceImageUrl;
+
+            uploadPlaceholder.style.display = "none";
+            imagePreview.style.display = "flex";
+
+            imageLabel.textContent = "SOURCE IMAGE";
+
+            fileInfo.style.display = "flex";
+            fileName.textContent = file.name;
+            fileSize.textContent = formatBytes(file.size);
+
+            analyzeButton.disabled = false;
+            analyzeButtonText.textContent = "✦  Analyze Image";
+
+            clearResults();
+
+            showToast("Image loaded successfully.");
+        }
+
+
+        browseButton.addEventListener("click", () => {
+            imageInput.click();
+        });
+
+
+        uploadZone.addEventListener("click", (event) => {
+            if (
+                event.target.closest("button") ||
+                event.target.closest(".image-preview")
+            ) {
+                return;
+            }
+
+            imageInput.click();
+        });
+
+
+        uploadZone.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                imageInput.click();
+            }
+        });
+
+
+        imageInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+
+            if (file) {
+                selectFile(file);
+            }
+
+            imageInput.value = "";
+        });
+
+
+        uploadZone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            uploadZone.classList.add("dragover");
+        });
+
+
+        uploadZone.addEventListener("dragleave", () => {
+            uploadZone.classList.remove("dragover");
+        });
+
+
+        uploadZone.addEventListener("drop", (event) => {
+            event.preventDefault();
+
+            uploadZone.classList.remove("dragover");
+
+            const file = event.dataTransfer.files[0];
+
+            if (file) {
+                selectFile(file);
+            }
+        });
+
+
+        function resetWorkspace() {
+            selectedFile = null;
+
+            if (sourceImageUrl) {
+                URL.revokeObjectURL(sourceImageUrl);
+                sourceImageUrl = null;
+            }
+
+            if (annotatedImageUrl) {
+                URL.revokeObjectURL(annotatedImageUrl);
+                annotatedImageUrl = null;
+            }
+
+            previewImage.removeAttribute("src");
+
+            uploadPlaceholder.style.display = "block";
+            imagePreview.style.display = "none";
+
+            fileInfo.style.display = "none";
+            analyzeButton.disabled = true;
+
+            analyzeButtonText.textContent = "✦  Analyze Image";
+
+            hideError();
+            clearResults();
+
+            imageInput.value = "";
+
+            showToast("Workspace reset.");
+        }
+
+
+        removeButton.addEventListener("click", resetWorkspace);
+        resetButton.addEventListener("click", resetWorkspace);
+
+
+        // ----------------------------------
+        // Display detection results
+        // ----------------------------------
+
+        function renderResults(data) {
+            const detections = data.detections || [];
+
+            const total = detections.length;
+
+            const averageConfidence = total
+                ? detections.reduce(
+                    (sum, item) => sum + item.confidence,
+                    0
+                ) / total
+                : 0;
+
+            const uniqueClasses = new Set(
+                detections.map(item => item.class_name)
+            );
+
+            document.getElementById("totalDetections").textContent = total;
+
+            document.getElementById("avgConfidence").textContent =
+                total
+                    ? `${(averageConfidence * 100).toFixed(1)}%`
+                    : "0%";
+
+            document.getElementById("damageTypes").textContent =
+                uniqueClasses.size;
+
+            document.getElementById("imageResolution").textContent =
+                `${data.image_width} × ${data.image_height}`;
+
+            resultsEmpty.style.display = "none";
+            loadingBox.style.display = "none";
+            resultList.style.display = "flex";
+
+            resultList.innerHTML = "";
+
+            resultsBadge.textContent = total
+                ? `${total} FOUND`
+                : "NO DETECTIONS";
+
+            if (total === 0) {
+                const emptyMessage = document.createElement("div");
+                emptyMessage.className = "results-empty";
+
+                const title = document.createElement("div");
+                title.className = "results-empty-title";
+                title.textContent = "No damage detected";
+
+                const description = document.createElement("p");
+                description.className = "results-empty-text";
+                description.textContent =
+                    "No objects exceeded the configured confidence threshold. This does not guarantee that the road is damage-free.";
+
+                emptyMessage.append(title, description);
+                resultList.appendChild(emptyMessage);
+
+                return;
+            }
+
+            detections.forEach((detection, index) => {
+                const item = document.createElement("div");
+                item.className = "result-item";
+
+                const top = document.createElement("div");
+                top.className = "result-item-top";
+
+                const name = document.createElement("div");
+                name.className = "class-name";
+                name.textContent = detection.class_name.replaceAll("_", " ");
+
+                const confidence = document.createElement("div");
+                confidence.className = "confidence";
+                confidence.textContent =
+                    `${(detection.confidence * 100).toFixed(2)}%`;
+
+                top.append(name, confidence);
+
+                const track = document.createElement("div");
+                track.className = "confidence-track";
+
+                const fill = document.createElement("div");
+                fill.className = "confidence-fill";
+
+                fill.style.width =
+                    `${Math.max(0, Math.min(100, detection.confidence * 100))}%`;
+
+                track.appendChild(fill);
+
+                const coordinates = document.createElement("div");
+                coordinates.className = "result-coordinates";
+
+                const box = detection.bounding_box;
+
+                coordinates.textContent =
+                    `Detection ${index + 1} · ` +
+                    `Box: (${box.x1}, ${box.y1}) – ` +
+                    `(${box.x2}, ${box.y2})`;
+
+                item.append(top, track, coordinates);
+                resultList.appendChild(item);
+            });
+        }
+
+
+        // ----------------------------------
+        // Run image prediction
+        // ----------------------------------
+
+        analyzeButton.addEventListener("click", async () => {
+            if (!selectedFile) {
+                showToast("Please select an image first.");
+                return;
+            }
+
+            hideError();
+
+            analyzeButton.disabled = true;
+            analyzeButtonText.textContent = "Analyzing...";
+
+            resultsEmpty.style.display = "none";
+            resultList.style.display = "none";
+            loadingBox.style.display = "block";
+
+            resultsBadge.textContent = "PROCESSING";
+
+            try {
+                const formData = new FormData();
+
+                formData.append("file", selectedFile);
+
+                const response = await fetch(
+                    `${API_BASE}/predict`,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                if (!response.ok) {
+                    let message = `API error: ${response.status}`;
+
+                    try {
+                        const errorData = await response.json();
+
+                        if (errorData.detail) {
+                            message = errorData.detail;
+                        }
+                    } catch (_) {
+                        // Keep the fallback error message.
+                    }
+
+                    throw new Error(message);
+                }
+
+                const data = await response.json();
+
+                renderResults(data);
+
+                // Fetch the annotated image separately.
+                const imageFormData = new FormData();
+                imageFormData.append("file", selectedFile);
+
+                const imageResponse = await fetch(
+                    `${API_BASE}/predict/image`,
+                    {
+                        method: "POST",
+                        body: imageFormData
+                    }
+                );
+
+                if (!imageResponse.ok) {
+                    throw new Error(
+                        "Detection succeeded, but the annotated image could not be generated."
+                    );
+                }
+
+                const imageBlob = await imageResponse.blob();
+
+                if (annotatedImageUrl) {
+                    URL.revokeObjectURL(annotatedImageUrl);
+                }
+
+                annotatedImageUrl = URL.createObjectURL(imageBlob);
+
+                viewResultButton.style.display = "block";
+
+                showToast("Analysis completed successfully.");
+
+            } catch (error) {
+                loadingBox.style.display = "none";
+
+                resultsEmpty.style.display = "block";
+                resultsBadge.textContent = "ERROR";
+
+                showError(
+                    `${error.message}. Make sure the FastAPI server is running.`
+                );
+
+            } finally {
+                analyzeButton.disabled = !selectedFile;
+                analyzeButtonText.textContent = "✦  Analyze Image";
+            }
+        });
+
+
+        // ----------------------------------
+        // View annotated image
+        // ----------------------------------
+
+        viewResultButton.addEventListener("click", () => {
+            if (!annotatedImageUrl) {
+                return;
+            }
+
+            previewImage.src = annotatedImageUrl;
+            imagePreview.style.display = "flex";
+            uploadPlaceholder.style.display = "none";
+
+            imageLabel.textContent = "AI DETECTION RESULT";
+
+            viewResultButton.textContent = "Download Annotated Image ↓";
+
+            viewResultButton.onclick = () => {
+                const link = document.createElement("a");
+
+                link.href = annotatedImageUrl;
+                link.download = "road_damage_result.jpg";
+
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            };
+        });
+
+
+        // ----------------------------------
+        // Connect to the FastAPI backend
+        // ----------------------------------
+
+        async function checkBackend() {
+            const connectionStatus =
+                document.getElementById("connectionStatus");
+
+            const modelStatus =
+                document.getElementById("modelStatus");
+
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+
+                if (!response.ok) {
+                    throw new Error("Backend unavailable");
+                }
+
+                const data = await response.json();
+
+                connectionStatus.textContent = "SYSTEM ONLINE";
+                modelStatus.textContent = "READY";
+
+                const classes = Object.values(data.available_classes || {});
+
+                document.getElementById("classCount").textContent =
+                    classes.length || "—";
+
+                const classTags = document.getElementById("classTags");
+                classTags.innerHTML = "";
+
+                if (classes.length) {
+                    classes.forEach(className => {
+                        const tag = document.createElement("span");
+
+                        tag.className = "class-tag";
+                        tag.textContent = className.replaceAll("_", " ");
+
+                        classTags.appendChild(tag);
+                    });
+                } else {
+                    classTags.innerHTML =
+                        '<span class="class-tag">No classes returned</span>';
+                }
+
+            } catch (error) {
+                connectionStatus.textContent = "API OFFLINE";
+                modelStatus.textContent = "UNAVAILABLE";
+
+                showError(
+                    "Could not connect to the API. Open the project through the FastAPI server and ensure it is running."
+                );
+            }
+        }
+
+
+        // Initialize the dashboard
+        checkBackend();
+    </script>
+</body>
+</html>
